@@ -17,19 +17,26 @@ function resetHoverStates() {
 }
 
 async function generatePDF() {
-    // Create download button loading state
     const downloadBtn = document.getElementById('downloadPDF');
     const originalText = downloadBtn.innerHTML;
     downloadBtn.innerHTML = 'Generando PDF...';
     downloadBtn.disabled = true;
 
     try {
-        // Trigger hover states and wait for animations
         triggerHoverStates();
         await new Promise(resolve => setTimeout(resolve, 1000));
 
-        // Configure PDF options
-        const element = document.body;
+        // Seleccionar todo el contenido hasta el final del footer
+        const footer = document.getElementById('footer');
+        const contentHeight = footer.offsetTop + footer.offsetHeight;
+        
+        // Crear un contenedor temporal
+        const container = document.createElement('div');
+        const content = Array.from(document.body.children).filter(el => {
+            return el.offsetTop <= contentHeight;
+        });
+        content.forEach(el => container.appendChild(el.cloneNode(true)));
+
         const opt = {
             margin: 0,
             filename: 'HojaDeVida_GermanGarciaPerez.pdf',
@@ -39,28 +46,25 @@ async function generatePDF() {
                 useCORS: true,
                 logging: false,
                 scrollY: 0,
+                height: contentHeight,
                 windowWidth: document.documentElement.scrollWidth,
-                windowHeight: document.documentElement.scrollHeight
             },
             jsPDF: { 
                 unit: 'px', 
-                format: [document.documentElement.scrollWidth, document.documentElement.scrollHeight],
+                format: [document.documentElement.scrollWidth, contentHeight],
                 orientation: 'portrait',
                 hotfixes: ['px_scaling']
             }
         };
 
-        // Generate PDF
-        await html2pdf().set(opt).from(element).save();
-
+        await html2pdf().set(opt).from(container).save();
+        
         // Reset states
         resetHoverStates();
-
     } catch (error) {
         console.error('Error generating PDF:', error);
         alert('Error al generar el PDF. Por favor intente nuevamente.');
     } finally {
-        // Reset button state
         downloadBtn.innerHTML = originalText;
         downloadBtn.disabled = false;
     }
