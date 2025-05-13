@@ -49,6 +49,11 @@
                     <li class="nav-item">
                         <a href="#footer" class="nav-link contact">Referencias y contacto</a>
                     </li>
+                    <li class="nav-item">
+                        <button id="downloadPDF" onclick="generatePDF()" class="nav-link btn btn-link">
+                            <i class="fa fa-download"></i> Descargar PDF
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -542,7 +547,26 @@
         </div>
       </div>
     </footer>
+          
 
+    <style>
+        #downloadPDF {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+        }
+        #downloadPDF:disabled {
+            opacity: 0.7;
+            cursor: wait;
+        }
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+        }
+    </style>
 
      <!-- SCRIPTS -->
      <script src="js/jquery.min.js"></script>
@@ -551,6 +575,7 @@
      <script src="js/owl.carousel.min.js"></script>
      <script src="js/smoothscroll.js"></script>
      <script src="js/custom.js"></script>
-
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+     <script src="js/pdf-download.js"></script>
 </body>
 </html>
